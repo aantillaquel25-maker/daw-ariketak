@@ -1,0 +1,6 @@
+console.log(5 === 5)
+console.log(5 === "5")
+console.log(1 === true)
+console.log(0 === false)
+console.log(Symbol(42) === Symbol(42))
+console.log(typeof Symbol(42) === typeof Symbol(42))
