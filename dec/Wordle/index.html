@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wordle</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+  <h1>Wordle</h1>
+ 
+  <!-- PASO 1: formulario inicial (intentos y letras) -->
+  <form id="formulario">
+    <label for="intentos">Intentos</label>
+    <select id="intentos">
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6" selected>6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+    </select>
+ 
+    <label for="letras">nº de letras</label>
+    <select id="letras">
+      <option value="4">4</option>
+      <option value="5" selected>5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+    </select>
+ 
+    <button type="submit" id="btn-jugar">Jugar</button>
+  </form>
+ 
+  <!-- Zona del juego: oculta hasta pulsar "Jugar" -->
+  <section id="juego" class="oculto">
+    <div id="tablero"></div>   <!-- PASO 2: cuadrícula de letras -->
+    <div id="teclado"></div>   <!-- PASO 2: teclado virtual -->
+  </section>
+ 
+  <!-- PASO 6: historial de las últimas 10 partidas -->
+  <section id="historial" class="oculto"></section>
+ 
+  <script src="js/js.js"></script>
+</body>
+</html>
+ 

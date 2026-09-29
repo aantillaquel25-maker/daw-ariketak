@@ -1,0 +1,64 @@
+/* ===== Variables de colores (el enunciado las pide) ===== */
+:root {
+  --color-fondo: #ffffff;
+  --color-texto: #1a1a1b;
+  --color-primario: #0d6efd;  /* botón Jugar */
+  --color-borde: #d3d6da;     /* bordes de los laukiak */
+  --color-tecla: #d3d6da;     /* teclas sin usar */
+  --color-ok: #6aaa64;        /* verde: letra bien colocada */
+  --color-existe: #c9b458;    /* amarillo: letra en otro sitio */
+  --color-no: #787c7e;        /* gris: letra que no está */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  text-align: center;
+}
+
+/* Formulario en columna y centrado (Flexbox) */
+#formulario {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+select,
+button {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+select {
+  min-width: 10rem;
+  border: 1px solid var(--color-borde);
+}
+
+#btn-jugar {
+  min-width: 12rem;
+  margin-top: 0.5rem;
+  border: none;
+  background-color: var(--color-primario);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+#btn-jugar:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Clase para ocultar elementos.
+   Lleva !important porque #formulario (con id) tiene más peso que una clase */
+.oculto {
+  display: none !important;
+}
