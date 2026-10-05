@@ -8,6 +8,7 @@
   --color-ok: #6aaa64;        /* verde: letra bien colocada */
   --color-existe: #c9b458;    /* amarillo: letra en otro sitio */
   --color-no: #787c7e;        /* gris: letra que no está */
+  --color-perdida: #c0392b;   /* rojo: partida perdida en el historial */
 }
 
 * {
@@ -43,7 +44,8 @@ select {
   border: 1px solid var(--color-borde);
 }
 
-#btn-jugar {
+#btn-jugar,
+#btn-reiniciar {
   min-width: 12rem;
   margin-top: 0.5rem;
   border: none;
@@ -61,4 +63,117 @@ select {
    Lleva !important porque #formulario (con id) tiene más peso que una clase */
 .oculto {
   display: none !important;
+}
+
+/* ===== PASO 2: tablero (Grid) ===== */
+#tablero {
+  display: grid;
+  gap: 5px;
+  max-width: 30rem;
+  margin: 1rem auto;
+}
+
+/* Cada fila tiene tantas columnas como letras (--columnas lo pone el JS) */
+.fila {
+  display: grid;
+  grid-template-columns: repeat(var(--columnas), minmax(0, 3.2rem));
+  justify-content: center;
+  gap: 5px;
+}
+
+.casilla {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border: 2px solid var(--color-borde);
+  border-radius: 6px;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* ===== PASO 2: teclado virtual (Flexbox) ===== */
+#teclado {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 34rem;
+  margin: 1.5rem auto 0;
+}
+
+.fila-teclado {
+  display: flex;
+  gap: 6px;
+}
+
+.tecla {
+  flex: 1;
+  padding: 0.9rem 0;
+  border: none;
+  background-color: var(--color-tecla);
+  color: var(--color-texto);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tecla-ancha {
+  flex: 1.5;
+}
+
+/* ===== PASO 4: mensajes y colores de resultado ===== */
+#mensaje {
+  min-height: 1.5rem; /* reserva el hueco para que la página no "salte" */
+  font-weight: bold;
+}
+
+/* Van al final para ganar a .casilla y .tecla (misma especificidad) */
+.ok {
+  background-color: var(--color-ok);
+  border-color: var(--color-ok);
+  color: #ffffff;
+}
+
+.existe {
+  background-color: var(--color-existe);
+  border-color: var(--color-existe);
+  color: #ffffff;
+}
+
+.no {
+  background-color: var(--color-no);
+  border-color: var(--color-no);
+  color: #ffffff;
+}
+
+/* ===== PASO 5: historial de partidas ===== */
+#historial {
+  max-width: 40rem;
+  margin: 1rem auto;
+}
+
+/* Lista en columna con Flexbox */
+#historial ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+#historial li {
+  padding: 0.6rem 0.8rem;
+  border-left: 6px solid var(--color-no);
+  border-radius: 6px;
+  background-color: #f3f3f4;
+  text-align: left;
+}
+
+#historial li.ganada {
+  border-left-color: var(--color-ok);
+}
+
+#historial li.perdida {
+  border-left-color: var(--color-perdida);
 }
