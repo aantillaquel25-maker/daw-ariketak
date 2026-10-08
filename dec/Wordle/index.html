@@ -9,7 +9,7 @@
 <body>
   <h1>Wordle</h1>
  
-  <!-- PASO 1: formulario inicial (intentos y letras) -->
+  <!-- formulario del index  -->
   <form id="formulario">
     <label for="intentos">Intentos</label>
     <select id="intentos">
@@ -31,15 +31,15 @@
  
     <button type="submit" id="btn-jugar">Jugar</button>
   </form>
-   <!-- Mensajes: "Faltan letras", "¡Has ganado!", etc. -->
+   <!-- mensajes: Faltan letras, Has ganado etc -->
   <p id="mensaje"></p>
-  <!-- Zona del juego: oculta hasta pulsar "Jugar" -->
+  <!-- para que se inicie el juego yu se oculta el boton  -->
   <section id="juego" class="oculto">
-    <div id="tablero"></div>   <!-- PASO 2: cuadrícula de letras -->
-    <div id="teclado"></div>   <!-- PASO 2: teclado virtual -->
+    <div id="tablero"></div>   <!-- cuadricula -->
+    <div id="teclado"></div>   <!-- teclado  -->
   </section>
  
-  <!-- PASO 6: historial de las últimas 10 partidas -->
+  <!-- historial de las últimas 10 partidas -->
   <section id="historial" class="oculto"></section>
  
   <script src="js/js.js"></script>

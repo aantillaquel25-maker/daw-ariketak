@@ -47,7 +47,7 @@ html, body {
   --shadow-card: 0 0.75rem 1.5rem -1.25rem rgba(10, 35, 29, 0.4);
 
   /* Foto semitransparente bajo el perfil: cambia none por url("./img/tu-foto.jpg") */
-  --profile-photo: none;
+  --profile-photo:url("./img/img/aloso_image.jpg");
   --profile-photo-opacity: 0.3;
 }
 
@@ -97,7 +97,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .avatar {
   position: relative;
 
-  width: max(6.5rem, 45%);
+  width: max(9rem, 60%);
   aspect-ratio: 1 / 1;
   flex-shrink: 0;
   margin: 0 auto;
@@ -206,9 +206,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .quote p { margin: 0; }
 .quote cite { display: block; margin-top: var(--space-xs); font-style: normal; color: var(--color-steel); font-size: 0.8rem; }
 
-/* =========================================================
-   PARTE DERECHA (contenido principal)
-   ========================================================= */
+/* PARTE DERECHA (contenido principal) */
 .content {
   padding: var(--space-lg);
   background: var(--color-bg);
@@ -217,7 +215,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   gap: var(--space-lg);
 }
 
-/* ---- Cabecera ---- */
+/*  Cabecera */
 .banner {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -252,7 +250,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   font-weight: 600;
 }
 
-/* ---- Perfil con foto semitransparente de fondo ---- */
+/*  foto de el coche trasnparenrte   */
 .profile-box {
   position: relative;
   isolation: isolate;
@@ -274,7 +272,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   opacity: var(--profile-photo-opacity);
 }
 
-/* ---- Secciones ---- */
+/*  secciones  */
 .section { display: flex; flex-direction: column; gap: var(--space-md); }
 .section-title {
   display: flex;
@@ -293,7 +291,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .section-title::after { content: ""; flex: 1; height: 1px; background: var(--color-border); }
 
-/* ---- Tarjetas ---- */
+/*  tarjetas  */
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -333,7 +331,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   background: var(--color-accent);
 }
 
-/* ---- Formacion (grid adaptable) ---- */
+/*formacion */
 .training-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
@@ -351,10 +349,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 .card-sub { margin: var(--space-2xs) 0 var(--space-xs); font-size: var(--fs-xs); font-weight: 600; color: var(--color-accent-dark); }
 .card-detail { margin: 0; font-size: var(--fs-sm); color: var(--color-text-muted); }
 
-/* ---- Logros + habilidades ---- */
+/*Logros*/
 .two-col-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
 
-/* ---- Tabla de grandes citas ---- */
+/*Tabla */
 .table-wrap {
   overflow-x: auto;
   background: var(--color-surface);
@@ -376,7 +374,7 @@ tbody tr:nth-child(even) { background: var(--color-bg); }
 .result--success { background: rgba(88, 176, 140, 0.2); color: var(--color-ink-800); }
 .result--handled { background: rgba(217, 164, 65, 0.2); color: var(--color-accent-dark); }
 
-/* ---- Pie ---- */
+/*Pie de la a pagina*/
 .footer-pagina {
   padding-top: var(--space-md);
   border-top: 1px solid var(--color-border);
@@ -386,9 +384,7 @@ tbody tr:nth-child(even) { background: var(--color-bg); }
 }
 .footer-pagina p { margin: 0; }
 
-/* =========================================================
-   RESPONSIVE (mobile first): a partir de 62rem, dos columnas
-   ========================================================= */
+/* RESPONSIVE */
 @media (min-width: 62rem) {
   .cv-container { grid-template-columns: minmax(16rem, 22rem) 1fr; }
   .content { padding: var(--space-xl); }

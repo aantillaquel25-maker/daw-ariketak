@@ -11,24 +11,24 @@ const historial = document.getElementById("historial");
 
 // ===== Estado del juego =====
 let palabra = "";   // palabra secreta
-let intentos = 0;   // nº de filas del tablero
-let letras = 0;     // nº de columnas del tablero
+let intentos = 0;   // para poner los intentos que va a tener la partida
+let letras = 0;     // cuantas letras hayas elegido para la palabra
 
-let filaActual = 0;        // en qué intento estamos (0 = primera fila)
-let intentoActual = "";    // letras escritas en la fila actual
-let intentosHechos = [];   // palabras ya enviadas (las usaremos en el paso 5)
-let juegoActivo = false;   // false = no se aceptan teclas
+let filaActual = 0;        // la fila por la que empieza el juego a escibir 
+let intentoActual = "";    // letras escritas en la fila que se ha empezado 
+let intentosHechos = [];   // palabras intentadas 
+let juegoActivo = false;   
 
-// Para el teclado: un color "mejor" no se debe pisar con uno "peor"
+// Para el teclado: darle prioridad al color del teclado para qe no se pierda el color de una letra que ya estaba en verde o amarillo o negro 
 const PRIORIDAD = { no: 1, existe: 2, ok: 3 };
 
-// Datos del historial
-const CLAVE_STORAGE = "partidasWordle"; // nombre con el que guardamos en localStorage
-const MAX_PARTIDAS = 10;                // solo guardamos las 10 últimas
+// Datos de los intentos 
+const CLAVE_STORAGE = "partidasWordle"; // este es el nombre donde se van a guardar los intentos que se han hecho en localStorage
+const MAX_PARTIDAS = 10;                // el programa solo guarda los 10 ultimos intentos que se han echio 
 const PAUSA_FINAL = 1500;               // ms para ver la última fila antes de quitar el tablero
 
-// Filas del teclado virtual (igual que en el enunciado)
-// split("") convierte un texto en un array de letras: "AB" -> ["A", "B"]
+// Filas del teclado virtual
+// split("") hace que el texto se convierta en un pto array 
 const FILAS_TECLADO = [
   ["Á", "É", "Í", "Ó", "Ú"],
   "QWERTYUIOP".split(""),
@@ -36,22 +36,21 @@ const FILAS_TECLADO = [
   ["Enter", ..."ZXCVBNM".split(""), "DEL"],
 ];
 
-// Pide una palabra aleatoria a la API (función flecha + async/await)
+// aqui se pide una palabra random a la api 
 const pedirPalabra = async (longitud) => {
   const url = `https://words-api-sy2x.onrender.com/api/word?lang=es&length=${longitud}&number=1`;
   const respuesta = await fetch(url);
   const datos = await respuesta.json();
 
-  console.log(datos); // MIRA AQUÍ cómo llega la respuesta de la API
+  console.log(datos); // aqui llega la palabra de la api a la consola y se puede ver desde el F12 
 
-  // Suponemos que llega una lista de palabras. Si no, ajusta esta línea
   return datos[0].toUpperCase();
 };
 
-// PASO 2: crea la cuadrícula (filas = intentos, columnas = letras)
+// Cuadro del juego 
 const crearTablero = () => {
-  tablero.innerHTML = ""; // vaciamos por si había una partida anterior
-  tablero.style.setProperty("--columnas", letras); // el CSS usa este valor
+  tablero.innerHTML = ""; // si hemos jugado antes de borra el tablero 
+  tablero.style.setProperty("--columnas", letras); // css 
 
   for (let i = 0; i < intentos; i++) {
     const fila = document.createElement("div");
@@ -66,7 +65,7 @@ const crearTablero = () => {
   }
 };
 
-// PASO 2: crea el teclado virtual con un botón por tecla
+// TECLADO DEL JUGO 
 const crearTeclado = () => {
   teclado.innerHTML = "";
 
@@ -77,17 +76,17 @@ const crearTeclado = () => {
     teclasFila.forEach((tecla) => {
       const boton = document.createElement("button");
       boton.textContent = tecla;
-      boton.dataset.tecla = tecla; // así lo encontraremos luego para pintarlo
+      boton.dataset.tecla = tecla; // luego esto se tiene que pintar de color como el teclado 
       boton.classList.add("tecla");
 
-      // "Enter" y "DEL" tienen más de 1 carácter: son teclas anchas
+      // para qu el enter y el espacio se vean bien tienen que ser un caaracter grande por eso son diferentes al resto 
       if (tecla.length > 1) {
         boton.classList.add("tecla-ancha");
       }
 
       boton.addEventListener("click", () => {
         pulsarTecla(tecla);
-        boton.blur(); // evita que el Enter real vuelva a "pulsar" este botón
+        boton.blur(); // evita que el enter real vuelva a pulsa este botón
       });
       fila.appendChild(boton);
     });
@@ -96,30 +95,33 @@ const crearTeclado = () => {
   });
 };
 
-// Muestra un texto debajo del título
+// enseñar el texcto debajo de la palabra que es 
 const mostrarMensaje = (texto) => {
   mensaje.textContent = texto;
 };
 
-// Devuelve el div de una casilla concreta (fila y columna)
+// devuelbe el div en la misma casilla 
 const obtenerCasilla = (fila, columna) => tablero.children[fila].children[columna];
 
-// ===== PASO 3: escribir y borrar letras =====
+
+
+
+//para escribir las letras y quitarlas
 const escribirLetra = (letra) => {
-  if (intentoActual.length >= letras) return; // la fila ya está llena
+  if (intentoActual.length >= letras) return; // para ver si la fila ya esta lleba 
 
   obtenerCasilla(filaActual, intentoActual.length).textContent = letra;
   intentoActual += letra;
 };
 
 const borrarLetra = () => {
-  if (intentoActual.length === 0) return; // no hay nada que borrar
+  if (intentoActual.length === 0) return; // mira si hay algo y si no lo hay no borra nada 
 
-  intentoActual = intentoActual.slice(0, -1); // quitamos la última letra
+  intentoActual = intentoActual.slice(0, -1); // quita la ultima litra que este escrita 
   obtenerCasilla(filaActual, intentoActual.length).textContent = "";
 };
 
-// Punto de entrada único: lo usan el teclado virtual y el real
+// Punto para escrbir las letras y borrar las letras con el teclado virtual o el teclado real
 const pulsarTecla = (tecla) => {
   if (!juegoActivo) return;
 
@@ -132,7 +134,7 @@ const pulsarTecla = (tecla) => {
   }
 };
 
-// Teclado real: traducimos cada tecla a lo que entiende pulsarTecla
+// teclado real 
 document.addEventListener("keydown", (evento) => {
   // Ignoramos atajos como Ctrl+R
   if (evento.ctrlKey || evento.metaKey || evento.altKey) return;
@@ -144,17 +146,16 @@ document.addEventListener("keydown", (evento) => {
   } else if (tecla === "Backspace" || tecla === "Delete") {
     pulsarTecla("DEL"); // "del" y "supr" borran igual
   } else if (/^[a-zñáéíóú]$/i.test(tecla)) {
-    pulsarTecla(tecla.toUpperCase()); // solo letras válidas
+    pulsarTecla(tecla.toUpperCase()); // coge las letras y las pone mayusculas 
   }
 });
 
-// ===== PASO 4: comprobar el intento =====
-// Devuelve un array con "ok", "existe" o "no" para cada letra
+// cuando devuelve un array lo que hace es mandar un array con los valores de cada letra de la palabra que se ha escrito y la palabra oculta y si es la que es o no
 const evaluarIntento = (intento, secreta) => {
   const resultado = Array(letras).fill("no");
-  const restantes = {}; // letras de la secreta que aún no se han "usado"
+  const restantes = {}; // las letras de la palabra que es que todavia no se han puesto 
 
-  // 1ª pasada: letras en su sitio (verde)
+  // mira si en  el primer intento hay letras que coincidien y si es asi las pine en verde 
   for (let i = 0; i < letras; i++) {
     if (intento[i] === secreta[i]) {
       resultado[i] = "ok";
@@ -163,24 +164,24 @@ const evaluarIntento = (intento, secreta) => {
     }
   }
 
-  // 2ª pasada: letras que están pero en otro sitio (amarillo)
+  // mira si hay alguna letra que coincida si lo hay pero esta en otro sitio la pone en amarillo. 
   for (let i = 0; i < letras; i++) {
     if (resultado[i] === "ok") continue; // esta ya está en verde
 
     const letra = intento[i];
     if (restantes[letra] > 0) {
       resultado[i] = "existe";
-      restantes[letra]--; // la "gastamos" para no repetirla de más
+      restantes[letra]--; 
     }
   }
 
   return resultado;
 };
 
-// Pinta una tecla del teclado virtual (sin rebajar un color mejor)
+// cuando has adivinado una letra la pinta en el teclado del color que le hayas adivinado 
 const pintarTecla = (letra, clase) => {
   const boton = teclado.querySelector(`[data-tecla="${letra}"]`);
-  if (!boton) return; // por si la letra no está en el teclado
+  if (!boton) return; // si la tecla no la encuentra en el teclado hace el return y no hace nada 
 
   const claseActual = ["ok", "existe", "no"].find((c) => boton.classList.contains(c));
 
@@ -190,7 +191,7 @@ const pintarTecla = (letra, clase) => {
   }
 };
 
-// Pinta las casillas de la fila actual y las teclas usadas
+// pinta las letras deel intento segun lo hayas adivinado 
 const pintarFila = (resultado) => {
   resultado.forEach((clase, i) => {
     obtenerCasilla(filaActual, i).classList.add(clase);
@@ -198,7 +199,7 @@ const pintarFila = (resultado) => {
   });
 };
 
-// Se ejecuta al pulsar Enter
+// Se ejecuta al pulsar intro 
 const comprobarIntento = () => {
   if (intentoActual.length < letras) {
     mostrarMensaje("Faltan letras");
@@ -212,18 +213,23 @@ const comprobarIntento = () => {
   if (intentoActual === palabra) {
     terminarJuego(true);
   } else if (filaActual === intentos - 1) {
-    terminarJuego(false); // era el último intento
+    terminarJuego(false); // es el ultimo intento si no lo addiinas vuelve a empezar 
   } else {
-    filaActual++; // pasamos a la siguiente fila
+    filaActual++; // pasa al siguiente intento 
     intentoActual = "";
   }
 };
 
-// ===== PASO 5: fin de partida e historial =====
-// Lee las partidas guardadas (si no hay ninguna, devuelve una lista vacía)
+
+
+
+
+
+//historial de los intentos 
+// lee las partidas que has jugado para dar un historial de los intentos y si no hay ninguna devuelve una lista vacia 
 const leerPartidas = () => JSON.parse(localStorage.getItem(CLAVE_STORAGE)) || [];
 
-// Añade la partida al principio de la lista y se queda solo con las 10 últimas
+// pone la ultima partida que se ha jugado la primera y solo coje las ultimas 10 partidas que se han jugado 
 const guardarPartida = (haGanado) => {
   const partidas = leerPartidas();
 
@@ -237,14 +243,14 @@ const guardarPartida = (haGanado) => {
   localStorage.setItem(CLAVE_STORAGE, JSON.stringify(partidas.slice(0, MAX_PARTIDAS)));
 };
 
-// Vuelve a la pantalla del formulario para jugar otra vez
+// vuelve a la pantalla del formulario para jugar otra vez
 const volverAlFormulario = () => {
   historial.classList.add("oculto");
   mostrarMensaje("");
   formulario.classList.remove("oculto");
 };
 
-// Dibuja el historial con las últimas partidas y el botón de jugar de nuevo
+// pone el historial con las últimas partidas y el botón de jugar de nuevo
 const mostrarHistorial = () => {
   historial.innerHTML = "";
 
@@ -271,22 +277,22 @@ const mostrarHistorial = () => {
   historial.classList.remove("oculto");
 };
 
-// Se llama cuando se acierta la palabra o se acaban los intentos
+// se llama cuando se acierta la palabra o se acaban los intentos
 const terminarJuego = (haGanado) => {
   juegoActivo = false; // ya no se aceptan teclas
   mostrarMensaje(haGanado ? "¡Has ganado!" : `Has perdido. La palabra era ${palabra}`);
   guardarPartida(haGanado);
 
-  // Esperamos un poco para que se vean los colores de la última fila
+  // tiempo de espera para que se vea el color verde 
   setTimeout(() => {
-    juego.classList.add("oculto"); // quitamos tablero y teclado
+    juego.classList.add("oculto"); // quita el tablero y teclado
     mostrarHistorial();
   }, PAUSA_FINAL);
 };
 
 // Oculta el formulario, enseña la zona de juego y la prepara
 const empezarJuego = () => {
-  // Reiniciamos el estado de la partida
+  // se reinicia l apartidf 
   filaActual = 0;
   intentoActual = "";
   intentosHechos = [];
@@ -299,14 +305,14 @@ const empezarJuego = () => {
   crearTeclado();
 };
 
-// Al pulsar "Jugar" leemos los valores y pedimos la palabra
+// cuando se da a jugar se coge la palabra de la api y se empieza el juego
 formulario.addEventListener("submit", async (evento) => {
   evento.preventDefault(); // evita que la página se recargue
 
   intentos = Number(selectIntentos.value);
   letras = Number(selectLetras.value);
 
-  // Mientras espera, bloqueamos el botón (la API puede tardar en despertar)
+  // mientras se carga la palabra se desactiva el botón y se pone un texto de cargando
   botonJugar.disabled = true;
   botonJugar.textContent = "Cargando...";
 
@@ -318,11 +324,11 @@ formulario.addEventListener("submit", async (evento) => {
     alert("No se pudo obtener la palabra. Inténtalo de nuevo.");
     return; // sin palabra no hay partida
   } finally {
-    // Pase lo que pase, dejamos el botón como estaba
+    //el boton se queda porsiaca 
     botonJugar.disabled = false;
     botonJugar.textContent = "Jugar";
   }
 
-  // Fuera del try: si algo falla aquí, el error real se verá en la consola
+  // Fuera del try: si algo falla aquí, el error real se ve en la consola
   empezarJuego();
 });

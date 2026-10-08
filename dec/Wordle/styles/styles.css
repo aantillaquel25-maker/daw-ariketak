@@ -5,10 +5,10 @@
   --color-primario: #0d6efd;  /* botón Jugar */
   --color-borde: #d3d6da;     /* bordes de los laukiak */
   --color-tecla: #d3d6da;     /* teclas sin usar */
-  --color-ok: #6aaa64;        /* verde: letra bien colocada */
+  --color-ok: #6aaa64;        /* verde: letra bien puesta */
   --color-existe: #c9b458;    /* amarillo: letra en otro sitio */
-  --color-no: #787c7e;        /* gris: letra que no está */
-  --color-perdida: #c0392b;   /* rojo: partida perdida en el historial */
+  --color-no: #787c7e;        /* gris: letra que no mala  */
+  --color-perdida: #c0392b;   /* rojo: partida palmada en el historial */
 }
 
 * {
@@ -24,7 +24,7 @@ body {
   text-align: center;
 }
 
-/* Formulario en columna y centrado (Flexbox) */
+/* css para el formulario  */
 #formulario {
   display: flex;
   flex-direction: column;
@@ -59,13 +59,14 @@ select {
   cursor: wait;
 }
 
-/* Clase para ocultar elementos.
-   Lleva !important porque #formulario (con id) tiene más peso que una clase */
+/* clase pra ocvulrae el formulario y elementos que lleven !important  */
 .oculto {
   display: none !important;
 }
 
-/* ===== PASO 2: tablero (Grid) ===== */
+
+
+/* grid */
 #tablero {
   display: grid;
   gap: 5px;
@@ -73,7 +74,7 @@ select {
   margin: 1rem auto;
 }
 
-/* Cada fila tiene tantas columnas como letras (--columnas lo pone el JS) */
+
 .fila {
   display: grid;
   grid-template-columns: repeat(var(--columnas), minmax(0, 3.2rem));
@@ -93,7 +94,10 @@ select {
   text-transform: uppercase;
 }
 
-/* ===== PASO 2: teclado virtual (Flexbox) ===== */
+
+
+
+/*  TECLADO */
 #teclado {
   display: flex;
   flex-direction: column;
@@ -121,13 +125,15 @@ select {
   flex: 1.5;
 }
 
-/* ===== PASO 4: mensajes y colores de resultado ===== */
+
+
+
+/* colore de las letra  */
 #mensaje {
-  min-height: 1.5rem; /* reserva el hueco para que la página no "salte" */
+  min-height: 1.5rem;
   font-weight: bold;
 }
 
-/* Van al final para ganar a .casilla y .tecla (misma especificidad) */
 .ok {
   background-color: var(--color-ok);
   border-color: var(--color-ok);
@@ -146,13 +152,17 @@ select {
   color: #ffffff;
 }
 
-/* ===== PASO 5: historial de partidas ===== */
+
+
+
+
+/* historial de las partidas */
 #historial {
   max-width: 40rem;
   margin: 1rem auto;
 }
 
-/* Lista en columna con Flexbox */
+/* lista en columna con Flexbox */
 #historial ul {
   display: flex;
   flex-direction: column;
